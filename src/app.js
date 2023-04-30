@@ -23,14 +23,15 @@ app.get("/creat-room", async (req, res) => {
       // eject_at_room_exp: false, S'il y a une réunion en cours à expl'heure de la salle, terminez la réunion en expulsant tout le monde.
     },
   };
-  try {
-    await axios
-      .post("https://api.daily.co/v1/rooms/", data, config)
-      .then((response) => {
-        res.json(response);
-      });
-  } catch (error) {
-    res.res("error", error);
-  }
+
+  await axios
+    .post("https://api.daily.co/v1/rooms/", data, config)
+    .then((response) => {
+      res.json({ ...response.data });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Erreur lors de la récupération des données");
+    });
 });
 module.exports = app;
